@@ -250,8 +250,8 @@ function generatePunches(){
 }
 function updatePunchSettings(){
   if(!base)return;
-  if(selfMode){saveState();return} // 셀프 모드: 이미 찍은 도형은 유지, 다음 터치부터 새 설정 적용
-  generatePunches();saveState();
+  if(selfMode){scheduleSaveState();return} // 셀프 모드: 이미 찍은 도형은 유지, 다음 터치부터 새 설정 적용
+  generatePunches();scheduleSaveState();
 }
 
 /* ---------- 렌더링 ---------- */
@@ -308,6 +308,8 @@ function render(){
 
 /* ---------- 상태 저장/복원 (IndexedDB, 실패해도 앱은 정상 동작) ---------- */
 const DB_NAME='punching-state-v1',DB_STORE='state';
+let saveTimer=null;
+function scheduleSaveState(){clearTimeout(saveTimer);saveTimer=setTimeout(()=>saveState(),150);}
 function openStateDB(){
   return new Promise((resolve,reject)=>{
     const req=indexedDB.open(DB_NAME,1);
@@ -331,6 +333,7 @@ async function saveState(){
     tx.oncomplete=()=>db.close();
   }catch(e){console.warn('상태 저장 실패',e)}
 }
+window.addEventListener('beforeunload',()=>{try{if(base&&sourceBlob)saveState()}catch(e){}});
 async function loadState(){
   try{
     const db=await openStateDB();
@@ -392,7 +395,7 @@ $('#file').addEventListener('change',async e=>{
     syncSideOptions();
     punches=[];
     if(selfMode)render();else generatePunches();
-    saveState();
+    scheduleSaveState();
   }catch(err){
     alert('이 이미지는 브라우저에서 읽을 수 없어요. JPG/PNG/WebP 이미지로 다시 올려주세요.\n(아이폰 HEIC 사진은 JPG로 변환이 필요할 수 있어요)');
   }
@@ -492,7 +495,7 @@ $('#selfBtn').onclick=()=>{
   selfMode=!selfMode;applySelfUI();
   if(selfMode){punches=[];render()}      // 켜면 빈 상태에서 직접 찍기 시작
   else if(base)generatePunches();        // 끄면 다시 자동 배치
-  saveState();
+  scheduleSaveState();
 };
 $('#undo').onclick=()=>{punches.pop();render();saveState()};
 $('#clearAll').onclick=()=>{punches=[];render();saveState()};
@@ -506,7 +509,7 @@ cv.addEventListener('pointerdown',e=>{
   const size=fitSize(pickSize()),rad=size/2;
   const rx=clamp(((x%W)+W)%W,rad,W-rad),ry=clamp(((y%H)+H)%H,rad,H-rad);
   punches.push(addPunch(rx,ry,size)); // 사진엔 구멍, 반대편엔 같은 좌표의 조각이 자동 생성됨
-  render();saveState();
+  render();scheduleSaveState();
 });
 
 syncSideOptions();
