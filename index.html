@@ -82,7 +82,7 @@ input[type=color]{width:100%;height:40px;padding:2px;border:1px solid #ddd;borde
 <option value="circle">원</option><option value="star">별</option><option value="heart">하트</option><option value="cloud">동그라미 구름</option>
 <option value="flower">꽃</option><option value="diamond">다이아몬드</option><option value="triangle">삼각형</option><option value="square">사각형</option><option value="oval">타원</option><option value="crescent">초승달</option>
 </select></label>
-<label id="charWrap">직접 입력 (1글자)<input id="char" type="text" value="" placeholder="예: 하, A, ♥" autocomplete="off" style="font-size:16px;text-align:center"><span class="hint" id="charHint">글자를 입력하면 위 도형 대신 이 글자가 쓰여요. 지우면 위 도형으로 돌아가요.</span></label>
+<label id="charWrap">직접 입력 (1글자)<input id="char" type="text" value="" placeholder="예: 하, A, ♥" autocomplete="off" style="font-size:16px;text-align:center"></label>
 <label>펀칭 방향<select id="axis"><option value="horizontal">가로</option><option value="vertical">세로</option></select></label>
 <label>펀칭 위치<select id="side"></select></label>
 <label>크기 방식<select id="sizeMode"><option value="fixed">고정</option><option value="random">랜덤 (섞기)</option></select></label>
@@ -95,7 +95,7 @@ input[type=color]{width:100%;height:40px;padding:2px;border:1px solid #ddd;borde
 <label>배경색<input id="bg" type="color" value="#9edcff"></label>
 <label>그림자<select id="shadow"><option value="off" selected>끄기</option><option value="on">켜기</option></select></label>
 <label>저장 방식<select id="saveMode"><option value="bg">배경색 버전</option><option value="transparent">투명 버전</option></select></label>
-<div class="hint full desc">펀칭 위치는 사진 전체에서 자동으로 배치됩니다. 크기와 간격이 클수록 서로 겹치지 않도록 배치 가능한 개수가 줄어들 수 있습니다. 원본 이미지는 수정하지 않고 매번 다시 렌더링합니다.</div>
+
 <div class="bar full"><button id="selfBtn">✋ 셀프 모드</button><div class="row"><button id="reset">초기화</button><button id="save" class="primary">PNG 저장</button></div></div>
 </div></section><section class="panel stagePanel"><div class="stage"><div class="empty" id="empty">사진을 업로드해 주세요</div><canvas id="cv" style="display:none"></canvas></div>
 <div class="hint selfHint hidden" id="selfHint">터치한 곳에 도형이 찍히고 반대편에 조각이 생겨요.</div>
@@ -458,7 +458,7 @@ $('#save').onclick=()=>{
 
 /* ---------- 셀프 모드 ---------- */
 function applySelfUI(){
-  $('#selfBtn').textContent=selfMode?'✋ 셀프 ON':'✋ 셀프 모드';
+  $('#selfBtn').textContent=selfMode?'셀프 ON':'셀프 모드';
   $('#selfBtn').classList.toggle('primary',selfMode);
   $('#selfTools').classList.toggle('hidden',!selfMode);
   $('#selfHint').classList.toggle('hidden',!selfMode);
