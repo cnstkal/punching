@@ -36,7 +36,9 @@ input[type=color]{width:100%;height:40px;padding:2px;border:1px solid #ddd;borde
   .stagePanel{grid-column:1;grid-row:1}
   .controls{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px 14px}
   .controls>.full{grid-column:1/-1}
-  .controls label{gap:3px;min-width:0}
+  .controls label{gap:3px;min-width:0;align-self:start}
+  .shapeField,.charField{grid-row:span 1}
+  .shapeField select,.charField input[type=text]{height:36px;min-height:36px;line-height:1.2;margin:0}
   .controls select,.controls input[type=text]{padding:6px 9px}
   .controls input[type=range]{height:22px}
   .controls input[type=color]{height:32px}
@@ -78,11 +80,10 @@ input[type=color]{width:100%;height:40px;padding:2px;border:1px solid #ddd;borde
 #reset{background:#fff!important;color:#2196f3!important;border-color:#111!important}
 </style></head><body><main><h2 class="pageTitle"><button id="homeNav" aria-label="홈으로" onclick="location.href='index.html'">⌂</button><span>펀칭 사꾸</span></h2><p class="hint top">사진을 업로드하면 도형이 자동으로 배치됩니다. 개수·크기·각도·간격을 조절하면 펀칭 결과가 자동으로 다시 만들어집니다.</p><div class="layout"><section class="panel ctrlPanel"><div class="controls">
 <label class="upload full">📷 사진 업로드<input id="file" type="file" accept="image/*"></label>
-<label>도형<select id="shape">
-<option value="circle">원</option><option value="star">별</option><option value="heart">하트</option><option value="cloud">동그라미 구름</option>
-<option value="flower">꽃</option><option value="diamond">다이아몬드</option><option value="triangle">삼각형</option><option value="square">사각형</option><option value="oval">타원</option><option value="crescent">초승달</option>
+<label class="shapeField">도형<select id="shape">
+<option value="circle">원</option><option value="star">별</option><option value="heart">하트</option><option value="flower">꽃</option><option value="cloud">동그라미 구름</option><option value="diamond">다이아몬드</option><option value="triangle">삼각형</option><option value="square">사각형</option><option value="oval">타원</option><option value="crescent">초승달</option><option value="pentagon">오각형</option><option value="hexagon">육각형</option><option value="ring">링</option><option value="cross">십자</option><option value="plus">플러스</option><option value="semicircle">반원</option>
 </select></label>
-<label id="charWrap">직접 입력 (1글자)<input id="char" type="text" value="" placeholder="예: 하, A, ♥" autocomplete="off" style="font-size:16px;text-align:center"></label>
+<label id="charWrap" class="charField">직접 입력 (1글자)<input id="char" type="text" value="" placeholder="예: 하, A, ♥" autocomplete="off" style="font-size:16px;text-align:center"></label>
 <label>펀칭 방향<select id="axis"><option value="horizontal">가로</option><option value="vertical">세로</option></select></label>
 <label>펀칭 위치<select id="side"></select></label>
 <label>크기 방식<select id="sizeMode"><option value="fixed">고정</option><option value="random">랜덤 (섞기)</option></select></label>
@@ -145,7 +146,7 @@ function shapePath(c,s,x,y,r,a=0){
   else if(s==='star'){
     for(let i=0;i<10;i++){const A=-Math.PI/2+i*Math.PI/5,R=i%2===0?r:r*.43,X=Math.cos(A)*R,Y=Math.sin(A)*R;i?c.lineTo(X,Y):c.moveTo(X,Y)}c.closePath();
   }else if(s==='heart'){
-    c.moveTo(0,r*.9);c.bezierCurveTo(-r*1.2,0,-r,-r,0,-r*.2);c.bezierCurveTo(r,-r,r*1.2,0,0,r*.9);c.closePath();
+    c.moveTo(0,r*.92);c.bezierCurveTo(-r*.12,r*.72,-r*.92,r*.12,-r*.92,-r*.35);c.bezierCurveTo(-r*.92,-r*.86,-r*.28,-r*1.02,0,-r*.52);c.bezierCurveTo(r*.28,-r*1.02,r*.92,-r*.86,r*.92,-r*.35);c.bezierCurveTo(r*.92,r*.12,r*.12,r*.72,0,r*.92);c.closePath();
   }else if(s==='diamond'){
     c.moveTo(0,-r);c.lineTo(r,0);c.lineTo(0,r);c.lineTo(-r,0);c.closePath();
   }else if(s==='triangle'){
@@ -158,6 +159,18 @@ function shapePath(c,s,x,y,r,a=0){
   }else if(s==='crescent'){
     c.arc(0,0,r,Math.PI*.3,Math.PI*1.7);
     c.arc(r*.38,0,r*.78,Math.PI*1.7,Math.PI*.3,true);c.closePath();
+  }else if(s==='pentagon'){
+    for(let i=0;i<5;i++){const A=-Math.PI/2+i*Math.PI*2/5,X=Math.cos(A)*r,Y=Math.sin(A)*r;i?c.lineTo(X,Y):c.moveTo(X,Y)}c.closePath();
+  }else if(s==='hexagon'){
+    for(let i=0;i<6;i++){const A=-Math.PI/6+i*Math.PI/3,X=Math.cos(A)*r,Y=Math.sin(A)*r;i?c.lineTo(X,Y):c.moveTo(X,Y)}c.closePath();
+  }else if(s==='ring'){
+    c.arc(0,0,r,0,Math.PI*2);c.arc(0,0,r*.52,0,Math.PI*2,true);
+  }else if(s==='cross'){
+    const q=r*.34;c.moveTo(-q,-r);c.lineTo(q,-r);c.lineTo(q,-q);c.lineTo(r,-q);c.lineTo(r,q);c.lineTo(q,q);c.lineTo(q,r);c.lineTo(-q,r);c.lineTo(-q,q);c.lineTo(-r,q);c.lineTo(-r,-q);c.lineTo(-q,-q);c.closePath();
+  }else if(s==='plus'){
+    const q=r*.28;c.moveTo(-q,-r);c.lineTo(q,-r);c.lineTo(q,-q);c.lineTo(r,-q);c.lineTo(r,q);c.lineTo(q,q);c.lineTo(q,r);c.lineTo(-q,r);c.lineTo(-q,q);c.lineTo(-r,q);c.lineTo(-r,-q);c.lineTo(-q,-q);c.closePath();
+  }else if(s==='semicircle'){
+    c.arc(0,0,r,Math.PI,0);c.lineTo(r,0);c.closePath();
   }else{ // cloud
     const bump=(x,y,rr)=>{c.moveTo(x+rr,y);c.arc(x,y,rr,0,Math.PI*2)};
     bump(-r*.5,0,r*.42);bump(0,-r*.2,r*.52);bump(r*.5,0,r*.42);bump(-r*.25,r*.28,r*.42);bump(r*.25,r*.28,r*.42);
@@ -310,7 +323,7 @@ async function saveState(){
       settings:{selfMode,char:$('#char').value,sizeMode:$('#sizeMode').value,minsize:$('#minsize').value,shape:$('#shape').value,axis:$('#axis').value,side:$('#side').value,
         size:$('#size').value,angle:$('#angle').value,count:$('#count').value,
         spacing:$('#spacing').value,rot:$('#rot').value,bg:$('#bg').value,
-        shadow:$('#shadow').value,saveMode:$('#saveMode').value}
+        shadow:$('#shadow').value}
     },'current');
     tx.oncomplete=()=>db.close();
   }catch(e){console.warn('상태 저장 실패',e)}
@@ -329,7 +342,7 @@ async function loadState(){
     const s=state.settings;
     $('#shape').value=s.shape;if(!$('#shape').value)$('#shape').value='circle';$('#axis').value=s.axis;$('#size').value=s.size;$('#angle').value=s.angle;
     $('#count').value=s.count;$('#spacing').value=s.spacing;$('#rot').value=s.rot;$('#bg').value=s.bg;
-    $('#shadow').value=s.shadow;$('#saveMode').value=s.saveMode;
+    $('#shadow').value=s.shadow;
     selfMode=!!s.selfMode;applySelfUI();
     $('#char').value=s.char||'';$('#sizeMode').value=s.sizeMode||'fixed';$('#minsize').value=s.minsize||24;
     syncLabels();syncSideOptions();$('#side').value=s.side;
