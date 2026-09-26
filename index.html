@@ -17,7 +17,7 @@ input[type=range]{width:100%;accent-color:#111;margin:0}
 input[type=color]{width:100%;height:40px;padding:2px;border:1px solid #ddd;border-radius:10px;background:#fff}
 .upload{position:relative;border:1px dashed #bbb;padding:20px;text-align:center;border-radius:12px;cursor:pointer;overflow:hidden}
 .upload input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}
- .stage{width:min(100%,760px);margin:0 auto;background-color:#f1f1ee;background-image:linear-gradient(45deg,#e7e7e3 25%,transparent 25%),linear-gradient(-45deg,#e7e7e3 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#e7e7e3 75%),linear-gradient(-45deg,transparent 75%,#e7e7e3 75%);background-size:20px 20px;background-position:0 0,0 10px,10px -10px,-10px 0;border-radius:14px;padding:10px;overflow:hidden;display:flex;justify-content:center;align-items:center;aspect-ratio:1/1;min-height:0}
+ .stage{width:min(100%,760px);margin:0 auto;background-color:#f1f1ee;background-image:linear-gradient(45deg,#e7e7e3 25%,transparent 25%),linear-gradient(-45deg,#e7e7e3 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#e7e7e3 75%),linear-gradient(-45deg,transparent 75%,#e7e7e3 75%);background-size:20px 20px;background-position:0 0,0 10px,10px -10px,-10px 0;border-radius:14px;padding:10px;overflow:hidden;display:flex;justify-content:center;align-items:center;aspect-ratio:auto;min-height:0}
 .stage{overflow:auto}.stage canvas{max-width:100%;max-height:100%;width:auto;height:auto;touch-action:none;-webkit-touch-callout:none;user-select:none;-webkit-user-select:none}
 .empty{color:#999;font-size:13px}
 .zoomTools{display:flex;justify-content:center;align-items:center;gap:8px;margin-top:8px}.zoomTools button{width:42px;height:34px;padding:0}.zoomTools span{min-width:58px;text-align:center;font-size:13px;color:#555}.zoomTools #zoomReset{min-width:58px;width:auto;font-size:13px;color:#555;background:#fff}.selfTools{display:flex;gap:8px;margin-top:8px}.selfTools button{flex:1}
@@ -43,7 +43,7 @@ input[type=color]{width:100%;height:40px;padding:2px;border:1px solid #ddd;borde
   .controls input[type=range]{height:22px}
   .controls input[type=color]{height:32px}
   .controls .bar{grid-column:1/-1}
-  .stage{aspect-ratio:1/1;max-height:none;width:min(100%,680px);margin:0 auto}
+  .stage{aspect-ratio:auto;max-height:none;width:min(100%,680px);margin:0 auto}
   .stage canvas{max-width:100%;max-height:100%;width:auto;height:auto}
 }
 
@@ -55,7 +55,7 @@ input[type=color]{width:100%;height:40px;padding:2px;border:1px solid #ddd;borde
   .layout{grid-template-columns:minmax(0,1fr);gap:10px}
   /* 캔버스는 항상 화면 위에 고정 → 아래 옵션을 만지면서 결과를 바로 확인 */
   .stagePanel{order:-1;position:sticky;top:0;z-index:10;padding:8px;border-radius:14px;box-shadow:0 4px 14px rgba(0,0,0,.08)}
-  .stage{aspect-ratio:1/1;min-height:0;max-height:none;width:min(100%,520px);margin:0 auto;padding:6px;overflow:hidden}
+  .stage{aspect-ratio:auto;min-height:0;max-height:none;width:min(100%,520px);margin:0 auto;padding:6px;overflow:hidden}
   .stage canvas{max-width:100%;max-height:100%;width:auto;height:auto}
   .panel.ctrlPanel{padding:12px}
   /* 옵션은 2열로 촘촘하게, 슬라이더도 반반 */
@@ -81,7 +81,7 @@ input[type=color]{width:100%;height:40px;padding:2px;border:1px solid #ddd;borde
 </style></head><body><main><h2 class="pageTitle"><span>PUNCHING</span></h2><div class="layout"><section class="panel ctrlPanel"><div class="controls">
 <label class="upload full">📷 사진 업로드<input id="file" type="file" accept="image/*"></label>
 <label class="shapeField">도형<select id="shape">
-<option value="circle">원</option><option value="star">별</option><option value="heart">하트</option><option value="flower">꽃</option><option value="cloud">동그라미 구름</option><option value="diamond">다이아몬드</option><option value="triangle">삼각형</option><option value="square">사각형</option><option value="oval">타원</option><option value="crescent">초승달</option><option value="pentagon">오각형</option><option value="hexagon">육각형</option><option value="ring">링</option><option value="cross">십자</option><option value="plus">플러스</option><option value="semicircle">반원</option>
+<option value="star" selected>별</option><option value="circle">원</option><option value="heart">하트</option><option value="flower">꽃</option><option value="cloud">동그라미 구름</option><option value="diamond">다이아몬드</option><option value="triangle">삼각형</option><option value="square">사각형</option><option value="oval">타원</option><option value="crescent">초승달</option><option value="pentagon">오각형</option><option value="hexagon">육각형</option><option value="ring">링</option><option value="cross">십자</option><option value="plus">플러스</option><option value="semicircle">반원</option><option value="clover">네잎클로버</option><option value="sparkle">반짝이</option><option value="drop">물방울</option><option value="petal">꽃잎</option><option value="bow">리본</option>
 </select></label>
 <label id="charWrap" class="charField">직접 입력 (1글자)<input id="char" type="text" value="" placeholder="예: 하, A, ♥" autocomplete="off" style="font-size:16px;text-align:center"></label>
 <label>펀칭 방향<select id="axis"><option value="horizontal">가로</option><option value="vertical">세로</option></select></label>
@@ -174,6 +174,17 @@ function shapePath(c,s,x,y,r,a=0){
     const q=r*.28;c.moveTo(-q,-r);c.lineTo(q,-r);c.lineTo(q,-q);c.lineTo(r,-q);c.lineTo(r,q);c.lineTo(q,q);c.lineTo(q,r);c.lineTo(-q,r);c.lineTo(-q,q);c.lineTo(-r,q);c.lineTo(-r,-q);c.lineTo(-q,-q);c.closePath();
   }else if(s==='semicircle'){
     c.arc(0,0,r,Math.PI,0);c.lineTo(r,0);c.closePath();
+  }else if(s==='clover'){
+    for(let i=0;i<4;i++){const A=i*Math.PI/2-Math.PI/4,px=Math.cos(A)*r*.42,py=Math.sin(A)*r*.42;c.moveTo(px+r*.32*Math.cos(A),py+r*.32*Math.sin(A));c.arc(px,py,r*.45,0,Math.PI*2)}
+  }else if(s==='sparkle'){
+    const q=r*.28;c.moveTo(0,-r);c.lineTo(q,-q);c.lineTo(r,0);c.lineTo(q,q);c.lineTo(0,r);c.lineTo(-q,q);c.lineTo(-r,0);c.lineTo(-q,-q);c.closePath();
+  }else if(s==='drop'){
+    c.moveTo(0,-r);c.bezierCurveTo(r*.78,-r*.08,r*.72,r*.62,0,r);c.bezierCurveTo(-r*.72,r*.62,-r*.78,-r*.08,0,-r);c.closePath();
+  }else if(s==='petal'){
+    for(let i=0;i<6;i++){const A=i*Math.PI/3-Math.PI/2;c.save();c.rotate(A);c.ellipse(0,-r*.48,r*.32,r*.58,0,0,Math.PI*2);c.restore()}
+    c.arc(0,0,r*.28,0,Math.PI*2);
+  }else if(s==='bow'){
+    c.moveTo(-r*.08,0);c.bezierCurveTo(-r*.45,-r*.8,-r,-r*.72,-r,-r*.12);c.bezierCurveTo(-r,.38*r,-r*.42,r*.65,-r*.08,r*.08);c.closePath();c.moveTo(r*.08,0);c.bezierCurveTo(r*.45,-r*.8,r,-r*.72,r,-r*.12);c.bezierCurveTo(r,.38*r,r*.42,r*.65,r*.08,r*.08);c.closePath();c.arc(0,0,r*.16,0,Math.PI*2);
   }else{ // cloud
     const bump=(x,y,rr)=>{c.moveTo(x+rr,y);c.arc(x,y,rr,0,Math.PI*2)};
     bump(-r*.5,0,r*.42);bump(0,-r*.2,r*.52);bump(r*.5,0,r*.42);bump(-r*.25,r*.28,r*.42);bump(r*.25,r*.28,r*.42);
@@ -302,6 +313,7 @@ function paint(c,transparent){
 function render(){
   if(!base)return;
   const L=layoutSize();cv.width=L.width;cv.height=L.height;
+  const stage=$('.stage');if(stage)stage.style.aspectRatio=`${L.width}/${L.height}`;
   cv.style.display='block';$('#empty').style.display='none';
   paint(ctx,false);
 }
@@ -450,7 +462,7 @@ $('#reset').onclick=async()=>{
   base=null;sourceBlob=null;W=0;H=0;punches=[];
   selfMode=false;applySelfUI();
   $('#file').value='';
-  $('#shape').value='circle';$('#axis').value='horizontal';
+  $('#shape').value='star';$('#axis').value='horizontal';
   $('#size').value='54';$('#angle').value='0';$('#count').value='1';$('#spacing').value='8';
   $('#char').value='';$('#sizeMode').value='fixed';$('#minsize').value='24';
   $('#rot').value='fixed';$('#bg').value='#9edcff';$('#shadow').value='off';
