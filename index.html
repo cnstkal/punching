@@ -20,7 +20,7 @@ input[type=color]{width:100%;height:40px;padding:2px;border:1px solid #ddd;borde
  .stage{width:min(100%,760px);margin:0 auto;background-color:#f1f1ee;background-image:linear-gradient(45deg,#e7e7e3 25%,transparent 25%),linear-gradient(-45deg,#e7e7e3 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#e7e7e3 75%),linear-gradient(-45deg,transparent 75%,#e7e7e3 75%);background-size:20px 20px;background-position:0 0,0 10px,10px -10px,-10px 0;border-radius:14px;padding:10px;overflow:hidden;display:flex;justify-content:center;align-items:center;aspect-ratio:1/1;min-height:0}
 .stage{overflow:auto}.stage canvas{max-width:100%;max-height:100%;width:auto;height:auto;touch-action:none;-webkit-touch-callout:none;user-select:none;-webkit-user-select:none}
 .empty{color:#999;font-size:13px}
-.zoomTools{display:flex;justify-content:center;align-items:center;gap:8px;margin-top:8px}.zoomTools button{width:42px;height:34px;padding:0}.zoomTools span{min-width:58px;text-align:center;font-size:13px;color:#555}.selfTools{display:flex;gap:8px;margin-top:8px}.selfTools button{flex:1}
+.zoomTools{display:flex;justify-content:center;align-items:center;gap:8px;margin-top:8px}.zoomTools button{width:42px;height:34px;padding:0}.zoomTools span{min-width:58px;text-align:center;font-size:13px;color:#555}.zoomTools #zoomReset{min-width:58px;width:auto;font-size:13px;color:#555;background:#fff}.selfTools{display:flex;gap:8px;margin-top:8px}.selfTools button{flex:1}
 .selfHint{margin:8px 2px 0}
 .hidden{display:none!important}
 .row{display:flex;gap:7px}.row>*{flex:1}
@@ -99,14 +99,14 @@ input[type=color]{width:100%;height:40px;padding:2px;border:1px solid #ddd;borde
 
 <div class="bar full"><button id="selfBtn">셀프 모드</button><div class="row"><button id="reset">초기화</button><button id="save" class="primary">PNG 저장</button></div></div>
 </div></section><section class="panel stagePanel"><div class="stage"><div class="empty" id="empty">사진을 업로드해 주세요</div><canvas id="cv" style="display:none"></canvas></div>
-<div class="zoomTools"><button id="zoomOut" type="button">−</button><span id="zoomVal">100%</span><button id="zoomIn" type="button">＋</button></div>
+<div class="zoomTools"><button id="zoomOut" type="button">−</button><button id="zoomReset" type="button">100%</button><button id="zoomIn" type="button">＋</button></div>
 <div class="hint selfHint hidden" id="selfHint">터치한 곳에 도형이 찍히고 반대편에 조각이 생겨요.</div>
 <div class="selfTools hidden" id="selfTools"><button id="undo">↩ 되돌리기</button><button id="clearAll">전체 지우기</button></div></section></div></main>
 <script>
 const $=s=>document.querySelector(s),cv=$('#cv'),ctx=cv.getContext('2d');
 let canvasZoom=1,canvasPanX=0,canvasPanY=0,canvasTouchStart=null,canvasPinchStart=null;
 function updateZoom(){canvasZoom=Math.max(.25,Math.min(4,canvasZoom));cv.style.maxWidth=canvasZoom<=1?"100%":"none";cv.style.maxHeight=canvasZoom<=1?"100%":"none";cv.style.transformOrigin="center center";cv.style.transform=`scale(${canvasZoom})`;$("#zoomVal").textContent=Math.round(canvasZoom*100)+"%"}
-$("#zoomIn").addEventListener("click",()=>{canvasZoom+=.25;updateZoom()});$("#zoomOut").addEventListener("click",()=>{canvasZoom-=.25;updateZoom()});
+$("#zoomIn").addEventListener("click",()=>{canvasZoom+=.25;updateZoom()});$("#zoomOut").addEventListener("click",()=>{canvasZoom-=.25;updateZoom()});$("#zoomReset").addEventListener("click",()=>{canvasZoom=1;canvasPanX=0;canvasPanY=0;updateZoom()});
 function applyCanvasZoom(){
   const max=Math.max(1,Math.min(4,canvasZoom));
   canvasZoom=max;
