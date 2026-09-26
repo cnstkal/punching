@@ -460,7 +460,7 @@ $('#save').onclick=()=>{
   const L=layoutSize(),o=document.createElement('canvas');
   o.width=L.width;o.height=L.height;
   paint(o.getContext('2d'),false);
-  const finish=(blob)=>{
+  const finish=async(blob)=>{
     if(!blob){alert('PNG 저장에 실패했어요. 다시 시도해주세요.');return;}
     const file=new File([blob],'punching-piece.png',{type:'image/png'});
     // 모바일: 공유 시트를 열어 "이미지 저장"으로 갤러리에 바로 저장할 수 있게 한다
